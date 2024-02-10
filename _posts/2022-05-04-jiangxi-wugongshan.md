@@ -8,7 +8,7 @@ permalink: /archives/2022-05-04/1
 description: "旅游江西"
 ---
 
-# 萍乡芦溪
+# 江西萍乡
 
 ## 武功山
 
