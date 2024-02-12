@@ -9,7 +9,7 @@ description: "Spring AOP"
 ---
 
 ### 关于学习redis优惠券秒杀实现一人一单遇到的问题
-```
+```java
 1.pom.xml引入org.aspectj aspectjweaver
 2.启动类添加注解暴露代理对象@EnableAspectJAutoProxy(exposeProxy = true)
 3.同一类引用事务注解失效解决代码:
@@ -20,8 +20,8 @@ synchronized(UserId.toString().intern()){   //intern()是加到字符串常量�
     return proxy.createVoucherorder(voucherId);
 }
 
-@Transactionapublic 
-Result createVoucherorder(Long voucherId){
+@Transactiona
+public Result createVoucherorder(Long voucherId){
     ...
 }
 ```
@@ -39,7 +39,8 @@ Result createVoucherorder(Long voucherId){
 Spring AOP 的原理参阅：[《Spring中的AOP和动态代理》](https://mp.weixin.qq.com/s?__biz=MzU1MzQ0NjU0Ng==&mid=2247485294&idx=1&sn=bf931565df839c98ff12b1bfdd14f89f&scene=21#wechat_redirect)
 # 一、日志处理
 #### 在调试程序时，如果需要在执行方法前打印方法参数，或者在执行方法后打印方法返回结果，可以使用切面来实现。
-```@Slf4j
+```java
+@Slf4j
 @Aspect
 @Component
 public class LoggerAspect {
@@ -57,7 +58,7 @@ public class LoggerAspect {
 ```
 # 二、事务控制
 #### Spring 提供的声明式事务也是基于 AOP 来实现的，在需要添加事务的方法上面使用 @Transactional 注解。
-```
+```java
 @Service
 public class DemoService {
  
@@ -69,7 +70,7 @@ public class DemoService {
 ```
 # 三、参数校验
 #### 如果需要在方法执行前对方法参数进行校验时，可以使用前置通知来获取切入点方法的参数，然后进行校验。
-```
+```java
 @Slf4j
 @Aspect
 @Component
@@ -85,7 +86,7 @@ public class ValidatorAspect {
 # 四、自定义注解
 #### 因为 AOP 可以拦截到切入点方法，Spring 也支持通过注解的方式来定义切点表达式，所以可以通过 AOP 来实现自定义注解的功能。
 #### 例如，自定义一个注解来实现声明式缓存，把方法的返回值进行缓存。
-```
+```java
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
@@ -108,7 +109,7 @@ public @interface Cacheable {
 }
 ```
 #### 然后定义一个切片来实现常规的缓存操作，先读缓存，缓存不存在时执行方法，然后把方法的返回结果进行缓存。
-```
+```java
 @Aspect
 @Component
 public class AnnotationAspect {
@@ -122,7 +123,7 @@ public class AnnotationAspect {
 ```
 # 五、AOP 方法失效问题
 #### Spring AOP 的原理是在原有方法外面增加一层代理，所以在当前类调用 AOP 方法时，因为 this 指向的是当前对象，而不是代理对象，所以 AOP 会失效。
-```
+```java
 @Service
 public class DemoService {
  
@@ -140,7 +141,7 @@ public class DemoService {
 #### 解决这个问题的常用方法有下面三种：
 ### 1. ApplicationContext
 #### 使用 ApplicationContext 来手动获取 Bean 对象，来调用 AOP 方法。
-```
+```java
 @Service
 public class DemoService {
  
@@ -161,7 +162,7 @@ public class DemoService {
 ### 2. AopContext
 #### 使用 AopContext 工具类来获取当前对象的代理对象。
 
-```
+```java
 @Service
 public class DemoService {
  
@@ -177,7 +178,7 @@ public class DemoService {
 ```
 ### 3. 注入自身
 #### 使用 Spring 注入自身来调用 AOP 方法。
-```
+```java
 @Service
 public class DemoService {
  
