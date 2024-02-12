@@ -1,40 +1,40 @@
 ---
 layout: post
 author: ᴢʜᴀɴɢ
-title: "Spring AOP经典应用场景"
+title: "Spring AOP经典应用场景(AOP 方法失效问题)"
 date: 2024-02-12
 music-id: 
 permalink: /archives/2024-02-12/1
 description: "Spring AOP"
 ---
 
-# 关于学习redis优惠券秒杀实现一人一单遇到的问题
-> pom.xml引入org.aspectj aspectjweaver
-启动类添加注解暴露代理对象@EnableAspectJAutoProxy(exposeProxy = true)
-同一类引用事务注解失效解决方法
+### 关于学习redis优惠券秒杀实现一人一单遇到的问题
 ```
-	Long userId = UserHolder.getUser().getId();
-	synchronized(UserId.toString().intern()){  //intern是加到字符串常量池里 常量池才会复用，new的话是每次在堆里开辟一个新对象，因此值一样对象地址也不同
-		//获取代理对象(事务)
-		IVoucherorderService proxy = (IVoucherorderService) AopContext.currentProxy();
-		return proxy.createVoucherorder(voucherId);
-	}
+1.pom.xml引入org.aspectj aspectjweaver
+2.启动类添加注解暴露代理对象@EnableAspectJAutoProxy(exposeProxy = true)
+3.同一类引用事务注解失效解决代码:
+Long userId = UserHolder.getUser().getId();
+synchronized(UserId.toString().intern()){   //intern()是加到字符串常量池里 常量池才会复用，new的话是每次在堆里开辟一个新对象，因此值一样对象地址也不同
+    //获取代理对象(事务)
+    IVoucherorderService proxy = (IVoucherorderService) AopContext.currentProxy();
+    return proxy.createVoucherorder(voucherId);
+}
 
-	@Transactionapublic 
-	Result createVoucherorder(Long voucherId){
-	......
-	}
+@Transactionapublic 
+Result createVoucherorder(Long voucherId){
+    ...
+}
 ```
-
-一、日志处理
-二、事务控制
-三、参数校验
-四、自定义注解
-五、AOP 方法失效问题
-    1. ApplicationContext
-    2. AopContext
-    3. 注入自身
-AOP 提供了一种面向切面操作的扩展机制，通常这些操作是与业务无关的，在实际应用中，可以实现：日志处理、事务控制、参数校验和自定义注解等功能。
+---
+### 一、日志处理
+### 二、事务控制
+### 三、参数校验
+### 四、自定义注解
+### 五、AOP 方法失效问题
+1. ApplicationContext
+2. AopContext
+3. 注入自身
+#### AOP 提供了一种面向切面操作的扩展机制，通常这些操作是与业务无关的，在实际应用中，可以实现：日志处理、事务控制、参数校验和自定义注解等功能。
 
 Spring AOP 的原理参阅：[《Spring中的AOP和动态代理》](https://mp.weixin.qq.com/s?__biz=MzU1MzQ0NjU0Ng==&mid=2247485294&idx=1&sn=bf931565df839c98ff12b1bfdd14f89f&scene=21#wechat_redirect)
 # 一、日志处理
