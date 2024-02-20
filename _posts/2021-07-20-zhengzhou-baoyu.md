@@ -9,8 +9,7 @@ description: "郑州暴雨"
 ---
 
 # 郑州
-
-![video](https://aroucc.oss-cn-hangzhou.aliyuncs.com/images/06b400fc44933be19e8864843247470.jpg)
+![PRIME](https://aroucc.oss-cn-hangzhou.aliyuncs.com/images/06b400fc44933be19e8864843247470.jpg)
 
 
 

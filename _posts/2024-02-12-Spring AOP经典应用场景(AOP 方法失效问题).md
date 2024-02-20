@@ -9,6 +9,7 @@ description: "Spring AOP"
 ---
 
 ### 关于学习redis优惠券秒杀实现一人一单遇到的问题
+#### Spring AOP 的原理是在原有方法外面增加一层代理，所以在当前类调用 AOP 方法时，因为 this 指向的是当前对象，而不是代理对象，所以 AOP 会失效。
 ```java
 1.pom.xml引入org.aspectj aspectjweaver
 2.启动类添加注解暴露代理对象@EnableAspectJAutoProxy(exposeProxy = true)

@@ -9,5 +9,4 @@ description: "太昊陵"
 ---
 
 # 淮阳太昊陵
-
 ![太昊陵](https://aroucc.oss-cn-hangzhou.aliyuncs.com/images/0426/taihaoling.jpg)

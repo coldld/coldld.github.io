@@ -9,8 +9,4 @@ description: "大熊猫基地"
 ---
 
 # 成都大熊猫基地
-## IFS
 ![IFS](https://aroucc.oss-cn-hangzhou.aliyuncs.com/images/0426/panda2.jpg)
-#### 文殊院
-#### 建设路小吃街
-#### 成都博物院

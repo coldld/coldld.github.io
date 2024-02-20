@@ -9,7 +9,4 @@ description: "旅游长沙"
 ---
 
 # 长沙橘子洲
-#### 五一广场
-![IFS](https://aroucc.oss-cn-hangzhou.aliyuncs.com/images/0426/changshaIFS.jpg)
-#### 《泰坦尼克号》 《日食》-沉浸电影
 ![TITANIC](https://aroucc.oss-cn-hangzhou.aliyuncs.com/images/0426/changshaTITANIC.jpg)
