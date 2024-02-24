@@ -10,7 +10,7 @@ description: "Java MySql"
 
 # Java笔记
 
-~~~
+```java
 null表示对象为空，isEmpty表示值为空
 
 - ArrayList:数组:查询快 增删慢
@@ -18,7 +18,7 @@ null表示对象为空，isEmpty表示值为空
 - HashSet:哈希表:数组(默认长度16加载因子0.75)+链表+(JDK8后链表长度>8,数组长度>=64自动链表转成红黑树)
 
 集合并发修改异常:迭代器遍历使用自己的删除方法.for循环:倒着遍历删除,i--,不能使用增强for循环
-~~~
+```
 
 ```java
 Java基本类型占用的字节数：
@@ -37,7 +37,7 @@ StringBuilder线程不安全,StringBuffer线程安全。
 操作字符串较少，或不需要操作，以及定义字符串变量，还是建议用String。
 ```
 # MySql笔记
-```mysql
+```sql
 [database=schema]
 
 show databases/tables;
@@ -50,7 +50,7 @@ drop database [if exists] mydb;
 use mydb;
 ```
 ### DDL表结构操作
-```mysql
+```sql
 create table 表名(id int primary key autu_increment comment 'ID唯一标识', ... , ...)[comment '表注释'];
 not null -- 非空约束
 unique -- 唯一约束 唯一不重复
@@ -81,13 +81,13 @@ varchar 字节范围(0,65535) 变长字符串 varchar(10):[性能低节省空间
 删除表名: drop table [if exists] 表名;
 ```
 ### DML增删改
-```mysql
+```sql
 insert into tb_emp (username,name,create_time) values ('aaa","插入",now()), ('piliang","批量",now());
 update tb_emp set name = '更新' , update_time = now() where id = 1; -- 不加where全部更新
 delete from tb_emp where id = 1; -- 不加where全部删除此表数据
 ```
 ### DQL查询
-```mysql
+```sql
 select (distinct去重记录) 字段列表 (as 别名 可省略) ( * 性能低?) ( cout(*)性能好)
 from 表名 -- 表名,表名 多表查询用,隔开   笛卡尔积:笛卡尔乘积是指在数学中,两个集合(A集合和B集合)的所有组合情况。
 where 条件
@@ -129,7 +129,7 @@ select
 from tb_emp group by job;
 ```
 ### 连接查询
-```mysql
+```sql
 ### 内连接：相当于查询A、B交集部分数据
 查询员工的姓名，及所属的部门名称（隐式内连接实现）
 select tb_emp.name,tb_dept.name from tb_emp,tb_dept where tb_emp.dept_id = tb_dept.id;
@@ -148,7 +148,7 @@ select e.name,d.name from tb_emp e {right join tb_dept d} on e.dept_id = d.id
 ```
 ### 子查询
 #### SQL语句中嵌套select语句,称为嵌套查询,又称子查询。
-```mysql
+```sql
 ### 标量子查询(只有一个值)
 select * from tb_emp where dept_id = (select id from tb_dept where name = '一部');
 
@@ -169,7 +169,7 @@ select * from tb_emp where entrydate > '2006-01-01';
 select e.* , d.name from (select * from tb_emp where entrydate > '2006-01-01') e , tb_dept d where e.dept_id = d.id;
 ```
 
-```mysql
+```sql
 
 ```
 
