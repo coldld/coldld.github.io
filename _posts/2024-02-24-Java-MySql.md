@@ -8,7 +8,8 @@ permalink: /archives/2024-02-24/1
 description: "Java MySql"
 ---
 
-# Java MySql 笔记
+# Java笔记
+
 ~~~
 null表示对象为空，isEmpty表示值为空
 
@@ -19,7 +20,7 @@ null表示对象为空，isEmpty表示值为空
 集合并发修改异常:迭代器遍历使用自己的删除方法.for循环:倒着遍历删除,i--,不能使用增强for循环
 ~~~
 
-~~~
+```java
 Java基本类型占用的字节数：
 1字节： byte , boolean
 2字节： short , char
@@ -28,10 +29,14 @@ Java基本类型占用的字节数：
 编码与中文：
 Unicode/GBK： 中文2字节
 UTF-8： 中文通常3字节，在拓展B区之后的是4字节
-~~~
-~~~
-StringBuilder线程不安全,StringBuffer线程安全。对于字符串相关的操作，如频繁的拼接、修改等，建议用StringBuilder，效率更高!操作字符串较少，或不需要操作，以及定义字符串变量，还是建议用String。
-~~~
+```
+
+```java
+StringBuilder线程不安全,StringBuffer线程安全。
+对于字符串相关的操作，如频繁的拼接、修改等，建议用StringBuilder，效率更高!
+操作字符串较少，或不需要操作，以及定义字符串变量，还是建议用String。
+```
+# MySql笔记
 ```mysql
 [database=schema]
 
@@ -44,8 +49,8 @@ create database [if not exists] mydb;
 drop database [if exists] mydb;
 use mydb;
 ```
+### DDL表结构操作
 ```mysql
--- DDL表结构操作
 create table 表名(id int primary key autu_increment comment 'ID唯一标识', ... , ...)[comment '表注释'];
 not null -- 非空约束
 unique -- 唯一约束 唯一不重复
@@ -75,14 +80,14 @@ varchar 字节范围(0,65535) 变长字符串 varchar(10):[性能低节省空间
 修改表名: rename table 表名 to 新表名;
 删除表名: drop table [if exists] 表名;
 ```
+### DML增删改
 ```mysql
--- DML增删改
 insert into tb_emp (username,name,create_time) values ('aaa","插入",now()), ('piliang","批量",now());
 update tb_emp set name = '更新' , update_time = now() where id = 1; -- 不加where全部更新
 delete from tb_emp where id = 1; -- 不加where全部删除此表数据
 ```
+### DQL查询
 ```mysql
--- DQL查询
 select (distinct去重记录) 字段列表 (as 别名 可省略) ( * 性能低?) ( cout(*)性能好)
 from 表名 -- 表名,表名 多表查询用,隔开   笛卡尔积:笛卡尔乘积是指在数学中,两个集合(A集合和B集合)的所有组合情况。
 where 条件
@@ -116,54 +121,58 @@ select * from 表 order by 入职时间 , 更新时间 desc
 if(条件表达式，true取值，false取值)
 select if(gender = 1，'男'，'女') 性别，count(*)from tb_emp group by gender
 
-    员工职位信息的统计
+员工职位信息的统计
 case 表达式 when 值1 then 结果1 when 值2 then 结果2 ... else ... end
 select
     (case job when 1 then "啊" when 2 then "我" when 3 then "额" else "无" end ),
     count(*)
 from tb_emp group by job;
-
-
-连接查询
-内连接：相当于查询A、B交集部分数据
-    查询员工的姓名，及所属的部门名称（隐式内连接实现）
-    select tb_emp.name,tb_dept.name from tb_emp,tb_dept where tb_emp.dept_id = tb_dept.id;
-    起别名 select e.name, d.name from tb_emp e, tb_dept d where e.dept_id = d.id;
-    查询员工的姓名，及所属的部门名称（显式内连接实现)
-    select tb_emp.name,tb_dept.name from tb_emp [inner 可省略] join tb_dept on tb_emp.dept_id = tb_dept.id;
-外连接：
-    左外连接：查询左表所有数据(包括两张表交集部分数据) select 字段列表 from 表1 left [outer] join 表2 on 连接条件;
-    查询员工表 所有 员工的姓名，和对应的部门名称（左外连接)
-    select e.name, d.name from {tb_emp e left join} tb_dept d on e.dept_id = d.id
-        
-    右外连接：查询右表所有数据(包括两张表交集部分数据)
-    查询部门表 所有 部门的名称，和对应的员工名称（右外连接)
-    select e.name,d.name from tb_emp e {right join tb_dept d} on e.dept_id = d.id
-
-子查询: 
-    SQL语句中嵌套select语句,称为嵌套查询,又称子查询。
-    select * from t1 where column1 = (select column1 from t2 ...);
-    子查询外部的语句可以是 insert/update/delete/select 的任何一个，最常见的是 select
-    
-    标量子查询(只有一个值)
-    select * from tb_emp where dept_id = (select id from tb_dept where name = '一部');
-    列子查询 返回的结果是一列（可以是多行) 常用的操作符： in 、 not 、 in 等
-    一行XXX1 -- 相当于数据库里查出来一列两行
-    两行XXX2 -- 相当于数据库里查出来一列两行
-    select id from tb_dept where name='一部' or name='二部'; -- 输出结果(2 , 3)
-    select * from tb_emp where dept_id in (select id from tb_dept where name = '一部' or name = '二部');
-    行子查询 返回的结果是一行（可以是多列 例如: 一列XXX1 两列XXX2 ）。常用的操作符： = 、 ◇ 、 in 、 not in
-    select entrydate,job from tb_emp where name = '姓名';-- 输出结果('2000-01-01',2) 放入下面sql语句()中即可
-    select * from tb_emp where (entrydate,job)=('2000-01-01',2);
-    表子查询 返回的结果是多行多列，常作为临时表常用的操作符： in
-    查询入职日期是"2006-01-01"之后的员工信息
-    select * from tb_emp where entrydate > '2006-01-01';
-    查询这部分员工信息及其部门名称 - tb_dept
-    select e.* , d.name from (select * from tb_emp where entrydate > '2006-01-01') e , tb_dept d where e.dept_id = d.id;
 ```
+### 连接查询
+```mysql
+### 内连接：相当于查询A、B交集部分数据
+查询员工的姓名，及所属的部门名称（隐式内连接实现）
+select tb_emp.name,tb_dept.name from tb_emp,tb_dept where tb_emp.dept_id = tb_dept.id;
+起别名 select e.name, d.name from tb_emp e, tb_dept d where e.dept_id = d.id;
+查询员工的姓名，及所属的部门名称（显式内连接实现)
+select tb_emp.name,tb_dept.name from tb_emp [inner 可省略] join tb_dept on tb_emp.dept_id = tb_dept.id;
+
+### 外连接：
+#### 左外连接：查询左表所有数据(包括两张表交集部分数据) select 字段列表 from 表1 left [outer] join 表2 on 连接条件;
+查询员工表 所有 员工的姓名，和对应的部门名称（左外连接)
+select e.name, d.name from {tb_emp e left join} tb_dept d on e.dept_id = d.id
+
+#### 右外连接：查询右表所有数据(包括两张表交集部分数据)
+查询部门表 所有 部门的名称，和对应的员工名称（右外连接)
+select e.name,d.name from tb_emp e {right join tb_dept d} on e.dept_id = d.id
+```
+### 子查询
+#### SQL语句中嵌套select语句,称为嵌套查询,又称子查询。
+```mysql
+### 标量子查询(只有一个值)
+select * from tb_emp where dept_id = (select id from tb_dept where name = '一部');
+
+### 列子查询 返回的结果是一列（可以是多行) 常用的操作符： in 、 not 、 in 等
+一行XXX1 -- 相当于数据库里查出来一列两行
+两行XXX2 -- 相当于数据库里查出来一列两行
+select id from tb_dept where name='一部' or name='二部'; -- 输出结果(2 , 3)
+select * from tb_emp where dept_id in (select id from tb_dept where name = '一部' or name = '二部');
+
+### 行子查询 返回的结果是一行（可以是多列 例如: 一列XXX1 两列XXX2 ）。常用的操作符： = 、 ◇ 、 in 、 not in
+select entrydate,job from tb_emp where name = '姓名';-- 输出结果('2000-01-01',2) 放入下面sql语句()中即可
+select * from tb_emp where (entrydate,job)=('2000-01-01',2);
+
+### 表子查询 返回的结果是多行多列，常作为临时表常用的操作符： in
+查询入职日期是"2006-01-01"之后的员工信息
+select * from tb_emp where entrydate > '2006-01-01';
+查询这部分员工信息及其部门名称 - tb_dept
+select e.* , d.name from (select * from tb_emp where entrydate > '2006-01-01') e , tb_dept d where e.dept_id = d.id;
+```
+
 ```mysql
 
 ```
+
 ```
 取本地IP接口
 https://api.live.bilibili.com/xlive/web-room/v1/index/getIpInfo
