@@ -36,6 +36,50 @@ StringBuilder线程不安全,StringBuffer线程安全。
 对于字符串相关的操作，如频繁的拼接、修改等，建议用StringBuilder，效率更高!
 操作字符串较少，或不需要操作，以及定义字符串变量，还是建议用String。
 ```
+### Mybatis参数占位符
+```java
+mapper里sql语句中的参数占位符
+#{...} 执行SQL时，会将#{...}替换为?，生成预编译SQL，会自动设置参数值。 参数传递时使用。
+${...}  拼接SQL，直接将参数拼接在SQL语句中，存在SQL注入问题。对表名、列表进行动态设置时使用。
+        
+模糊查询 where name like '%${name}%' 不能使用#{name} 因为字符串中不能有问号
+字符串拼接函数 concat('%',#{name},'%')
+```
+### Lombok
+```java
+Lombok 能通过注解的形式自动生成构造器 需要引入依赖
+@EqualsAndHashCode 根据类所拥有的非静态字段自动重写 equals方法和 hashCode方法
+@Data 提供了更综合的生成代码功能(@Getter + @Setter + @ToString + @EqualsAndHashCode)
+@NoArgsConstructor 为实体类生成 无参构造
+@AllArgsConstructor 为实体类生成除了static修饰的字段之外 全参构造
+```
+### Mybatis主键返回@Options
+```java
+@Options(keyProperty = "id", useGeneratedKeys = true) 会自动将生成的主键值，赋值给emp对象的id属性
+@Insert("insert into emp(... , ...)values(... , ...)
+void insert(Emp emp);
+```
+### Mybatis开启的驼峰camel命名自动映射开关
+```java
+mybatis.configuration.map-underscore-to-camel-case = true
+```
+### Mybatis 动态SQL
+```xml
+<where>会自动去除条件里开头的 and 和 or
+    <if test="name != null"> 
+        and ...
+    </if>
+</where>
+
+<set>会删掉额外的逗号（用在update语句中)</set>
+
+<foreach collection="ids遍历的集合名称" item="id遍历出来的元素" 
+         separator=",分隔符" open="(遍历开始前拼接的SQL片段" close=")遍历结束后拼接的SQL片段">
+    #{id}
+</foreach>
+
+<sql id="XXX引用"></sql>先定义sql语句 再调用<include refid="XXX引用"/>
+```
 # MySql笔记
 ```sql
 [database=schema]
@@ -56,7 +100,8 @@ not null -- 非空约束
 unique -- 唯一约束 唯一不重复
 primary key -- 主键约束 (autu_increment自增) 主键是一行数据的唯一标识，非空且唯一 
 default -- 默认约束  保存数据时，如果未指定该字段值，则采用默认值
-foreign key-- 外键约束 物理外键(影响增删改效率 建议逻辑外键)让两张表的数据建立连接，保证数据的一致性和完整性 (仅用于单节点数据库，不适用与分布式、集群场景。容易引发数据库的死锁问题，消耗性能。
+foreign key-- 外键约束 物理外键(影响增删改效率 建议逻辑外键)让两张表的数据建立连接，保证数据的一致性和完整性 
+-- (仅用于单节点数据库，不适用与分布式、集群场景。容易引发数据库的死锁问题，消耗性能)
 -- constraint 外键名称 foreign key (外键字段名) references 主表(字段名)
 例子 让两张表的数据建立连接
 alter table tb_emp add constraint tb_emp_fk_dept_id foreign key (dept_id) references tb_dept (id) ;
@@ -168,9 +213,17 @@ select * from tb_emp where entrydate > '2006-01-01';
 查询这部分员工信息及其部门名称 - tb_dept
 select e.* , d.name from (select * from tb_emp where entrydate > '2006-01-01') e , tb_dept d where e.dept_id = d.id;
 ```
-
+### 索引(index)
+#### 帮助数据库 高效获取数据 的 数据结构。相当于一本书的目录
+#### mysql默认索引结构B+Tree(多路平衡搜索树)矮胖矮胖的树。叶子节点是双向链表便于排序
 ```sql
-
+primary key 主键字段，在建表时，会自动创建主键索引。性能最高
+unique 添加唯一约束时，数据库实际上会添加唯一索引。
+创建 create [unique] index 索引名 on 表名(字段名,...);
+例 create index idx_sku_sn on tb_sku(sn);
+查看 show index from 表名;
+删除 drop index 索引名 on 表名;
+索引会占用存储空间。索引提高了查询效率，同时也降低了insert,update,delete的效率。
 ```
 
 ```
