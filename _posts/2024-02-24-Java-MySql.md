@@ -9,7 +9,10 @@ description: "Java MySql"
 ---
 
 # Java笔记
-
+![Collection](https://aroucc.oss-cn-hangzhou.aliyuncs.com/images/Collection.png)
+![IO](https://aroucc.oss-cn-hangzhou.aliyuncs.com/images/IO%E6%B5%81%E4%BD%93%E7%B3%BB.png)
+![lambda](https://aroucc.oss-cn-hangzhou.aliyuncs.com/images/%E5%8C%BF%E5%90%8D%E5%86%85%E9%83%A8%E7%B1%BB%E6%88%90lambda.png)
+![mybatis_2._and_1.](https://aroucc.oss-cn-hangzhou.aliyuncs.com/images/mybatis.png)
 ```java
 null表示对象为空，isEmpty表示值为空
 
