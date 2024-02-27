@@ -55,6 +55,7 @@ Lombok 能通过注解的形式自动生成构造器 需要引入依赖
 @Data 提供了更综合的生成代码功能(@Getter + @Setter + @ToString + @EqualsAndHashCode)
 @NoArgsConstructor 为实体类生成 无参构造
 @AllArgsConstructor 为实体类生成除了static修饰的字段之外 全参构造
+@RequiredArgsConstructor 加final的会注入 例 private final IUserServic usrSrvice;
 ```
 ### Mybatis主键返回@Options
 ```java
@@ -228,7 +229,25 @@ unique 添加唯一约束时，数据库实际上会添加唯一索引。
 删除 drop index 索引名 on 表名;
 索引会占用存储空间。索引提高了查询效率，同时也降低了insert,update,delete的效率。
 ```
-
+### MybatisPlus中比较常用的几个注解如下：
+```java
+@TableName：用来指定表名
+@Tableld:用来指定表中的主键字段信息
+@TableField:用来指定表中的普通字段信息
+例
+@TableName ("tb_user")
+public class User {
+    @TableId(value= "id", type= IdType.AUTO)AUTO:数据库自增长 不写默认雪花算法
+    private Long id;
+    @TableField ("username")成员变量名与数据库字段名不一致
+    private String name;
+    @TableField("is_married")成员变量名以is开头，且是布尔值
+    private Boolean isMarried;
+    @TableField(""order`")成员变量名与数据库关键字冲突
+    private Integer order;
+    @TableField(exist = false)成员变量不是数据库字段
+    private String address;
+}
 ```
 取本地IP接口
 https://api.live.bilibili.com/xlive/web-room/v1/index/getIpInfo
