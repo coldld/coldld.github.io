@@ -9,5 +9,5 @@ title: About
 有事[ᴍᴇssᴀɢᴀ](/message)留言dd；O(∩_∩)O
 
 **网页加载慢**
-<br>`服务器需备案...所以用了cloudflare的CDN加速`<br>
+<br><del>`用了cloudflare的CDN加速`</del>过了一年继续卡- -<br>
 

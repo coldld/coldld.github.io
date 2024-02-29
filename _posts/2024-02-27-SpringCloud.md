@@ -2,9 +2,9 @@
 layout: post
 author: ᴢʜᴀɴɢ
 title: "SpringCloud笔记"
-date: 2024-02-26
+date: 2024-02-27
 music-id: 
-permalink: /archives/2024-02-26/1
+permalink: /archives/2024-02-27/1
 description: "SpringCloud"
 ---
 
@@ -67,5 +67,61 @@ docker run ... -v html:/root/htm：把html数据卷挂载到容器内的/root/ht
 目录挂载与数据卷挂载的语法类似：
 -v [宿主机目录]:[容器内目录] 例-v /tmp/mysql/data:/var/lib/mysql
 -v [宿主机文件]:[容器内文件] 
+```
+
+### SpringAMQP
+提供了模板来发送和接收消息。包含两部分，其中spring-amqp是基础抽象，spring-rabbit是底层的默认实现。
+利用RabbitTemplate的convertAndSend方法
+```java
+消费者 接收消息
+@RabbitListener(queues="队列名")
+
+修改application.yml文件,设置preFetch这个值,可以控制预取消息的上限:
+preFetch: 1 # 每次只能获取一条消息，处理完成才能获取下一个消息
+
+交换机:FanoutExchange的使用 广播发送
+在consumer服务常见一个类，添加@Configuration注解，并声明FanoutExchange、Queue和绑定关系对象Binding
+在consumer服务的SpringRabbitListener类中，添加两个方法，分别监听fanout.queue1和fanout.queue2
+在publisher服务发送消息到FanoutExchange 以前发送到队列 现在发送到交换机
+交换机:Direct Exchange会将接收到的消息根据规则路由到指定的Queue,因此称为路由模式(routes)
+可以模拟广播 但是要指定key
+@RabbitListener(bindings = @QueueBinding(
+value = @Queue(name = "direct.queue1"),
+exchange = @Exchange(name = "itcast.direct", type = ExchangeTypes.DIRECT),
+key = {"red", "blue"}))
+public void listenDirectQueue1(String msg){
+System,out.println("消费者1接收到Direct消息：msg
+交换机:TopicExchange与DirectExchange类似，区别在于routingKey必须是多个单词的列表，并且以.分割。
+Queue与Exchange指定BindingKey时可以使用通配符：
+#代指0个或多个单词   *代指一个单词
+
+消息转换器
+SpringAMQP中消息的序列化和反序列化是怎么实现的？
+利用MessageConverter实现的，默认是JDK的序列化(建议用自定义的MessageConverter)
+例
+在consumer服务定义MessageConverter:
+return new Jackson2JsonMessageConverter();
+```
+### ES
+```java
+# 创建文档
+POST/索引库名/_doc/文档id{json文档}
+# 查询文档
+GET /索引库名/_doc/文档id
+# 删除文档
+DELETE /索引库名/_doc/文档id
+# 修改文档
+全量修改，会删除旧文档，添加新文档
+PUT /索引库名/_doc/文档id
+{
+"字段1": "值1"，
+"字段2"："值2"，
+//...略
+}
+增量修改，修改指定字段值(局部修改)
+POST /索引库名/_update/文档id
+
+RestClient
+用来操作ES。这些客户端的本质就是组装DSL语句,通过http请求发送给ES。
 ```
 
