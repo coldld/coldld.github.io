@@ -8,9 +8,9 @@ title: Links
 [肉豆蔻吖](https://xiamu.icu/) \| [:p_ᴢʜᴀɴɢ](https://disbb.com/)
 
 
-**\# 常逛论坛**
+**\# 毕业院校**
 
-[哔哩哔哩大学](https://www.bilibili.com/) \| [GitHub](https://www.p0rnhub.com/) 
+[哔哩哔哩大学](https://www.bilibili.com/)
 
 
 
