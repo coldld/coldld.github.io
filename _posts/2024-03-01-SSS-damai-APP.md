@@ -1,10 +1,10 @@
 ---
 layout: post
 author: m2kar
-title: "[学习]转载[Android逆向] 某麦网APK抢票接口加密参数分析"
-date: 2023-05-17T10:45:07Z
+title: "[学习转载] [Android逆向]某麦网APK抢票接口加密参数分析"
+date: 2024-03-01T10:45:07Z
 music-id:
-permalink: /archives/2023-05-17/0
+permalink: /archives/2024-03-01/0
 description: "DaMai"
 ---
 

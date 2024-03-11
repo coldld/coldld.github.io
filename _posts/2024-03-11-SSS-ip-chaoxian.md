@@ -1,7 +1,7 @@
 ---
 layout: post
 author: gujiakai
-title: "[学习]转载 修改ip归属地为朝鲜、南极洲的方法"
+title: "[学习转载] 修改ip归属地为朝鲜、南极洲的方法"
 date: 2024-03-11
 music-id: 
 permalink: /archives/2024-03-11/0
