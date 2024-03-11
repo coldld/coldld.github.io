@@ -4,7 +4,7 @@ author: ᴢʜᴀɴɢ
 title: "郑州"
 date: 2021-07-20
 music-id: 
-permalink: /archives/2021-07-20/0
+permalink: /archives/2021-07-20/1
 description: "郑州暴雨"
 ---
 

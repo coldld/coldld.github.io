@@ -2,21 +2,21 @@
 layout: post
 author: ᴢʜᴀɴɢ
 title: "SpringCloud笔记"
-date: 2024-02-27
+date: 2023-05-22
 music-id: 
-permalink: /archives/2024-02-27/1
+permalink: /archives/2023-05-22/1
 description: "SpringCloud"
 ---
 
 # SpringCloud笔记
-### Eureka注册中心
+## Eureka注册中心
 ```java
 localhost:8080/user/变成了userservice/user/
 给RestTemplate注解@LoadBalanced(userservice/user/请求到 Ribbon负载均衡 找eureka拉取服务)
 负载均衡的是orderservice选一个userservice服务里的2个实例
 ```
-### Nacos注册中心
-#### 分级存储
+## Nacos注册中心
+### 分级存储
 ```java
 一级是服务，例如userservice
 二级是集群，例如杭州或上海
@@ -34,7 +34,7 @@ public class PatternProperties {private String dateformat;}
 
 多种配置的优先级：[服务名]-[环境].yaml >[服务名].yaml >本地配置
 ```
-### Feign是一个声明式的http客户端(自带ribbon负载均衡) 代替RestTemplate
+## Feign是一个声明式的http客户端(自带ribbon负载均衡) 代替RestTemplate
 ```java
 在order-service的启动类添加注解开启Feign的功能@EnableFeignClients
 @FeignClient ("userservice")
@@ -47,13 +47,13 @@ public interface UserClient {
 方式一:指定FeignClient所在包@EnableFeignClients(basePackages = "cn.itcast.feign.clients")
 方式二:推荐:指定FeignClient字节码@EnableFeignClients(clients = {UserClient.class})
 ```
-### Gateway负载均衡相当于在很多orderservice里面选一个
+## Gateway负载均衡相当于在很多orderservice里面选一个
 #### Nacos的负载均衡是给orderservice选一个userservice
 #### 网关的负载均衡是客户端请求到服务时发生的，而Feign的负载均衡是一个服务调另一个服务时发生的
 ```java
 当过滤器的order值一样时，会按照 defaultFilter > 路由过滤器 > GlobalFilter的顺序执行。
 ```
-### Docker
+## Docker
 ### 数据卷的作用：将容器与数据分离，解耦合，方便操作容器内数据，保证数据安全
 ```docker
 数据卷操作：
@@ -102,7 +102,7 @@ SpringAMQP中消息的序列化和反序列化是怎么实现的？
 在consumer服务定义MessageConverter:
 return new Jackson2JsonMessageConverter();
 ```
-### ES
+## ES
 ```java
 # 创建文档
 POST/索引库名/_doc/文档id{json文档}

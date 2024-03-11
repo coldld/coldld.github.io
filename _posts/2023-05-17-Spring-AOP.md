@@ -4,7 +4,7 @@ author: ᴢʜᴀɴɢ
 title: "Spring AOP经典应用场景(AOP 方法失效问题)"
 date: 2023-05-17
 music-id: 
-permalink: /archives/2023-05-17/0
+permalink: /archives/2023-05-17/1
 description: "Spring AOP"
 ---
 
