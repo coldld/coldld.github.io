@@ -1,7 +1,7 @@
 ---
 layout: post
 author: ᴢʜᴀɴɢ
-title: "SpringBoot笔记"
+title: "[笔记] SpringBoot"
 date: 2023-05-21
 music-id: 
 permalink: /archives/2023-05-21/1
