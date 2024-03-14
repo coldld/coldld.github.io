@@ -5,7 +5,7 @@ title: "[学习转载] 修改ip归属地为chao鲜、南极洲的方法"
 date: 2024-03-11
 music-id: 
 permalink: /archives/2024-03-11/0
-description: "修改ip归属地为chao鲜、南极洲的方法"
+description: "改ip归属地为chao鲜、南极洲"
 ---
 
 > [本文作者地址](https://blog.gujiakai.top/2023/08/methods-for-setting-ip-to-north-korea-and-antarctica)
