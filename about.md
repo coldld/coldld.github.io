@@ -9,5 +9,5 @@ title: About
 有事请[ᴍᴇssᴀɢᴀ](/message)留言；
 
 **网页加载慢**  
-`用了cloudflare的CDN加速 不理想`
+<del>`用了cloudflare的CDN加速 不理想`</del>
 
