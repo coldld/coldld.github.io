@@ -1,7 +1,7 @@
 ---
 layout: post
 author: ᴢʜᴀɴɢ
-title: "[笔记] SpringCloud"
+title: "SpringCloud"
 date: 2023-05-22
 music-id: 
 permalink: /archives/2023-05-22/1
