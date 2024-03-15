@@ -2,9 +2,9 @@
 layout: post
 author: ᴢʜᴀɴɢ
 title: "我的一些收藏夹"
-date: 2024-03-15
+date: 2019-04-06
 music-id: 
-permalink: /archives/2024-03-15/1
+permalink: /archives/2019-04-06/1
 description: "MyFavorite"
 ---
 ### [fofa ChatGPT](https://fofa.info/result?qbase64=ImxvYWRpbmctd3JhcCIgJiYgImJhbGxzIiAmJiAiY2hhdCIgJiYgaXNfZG9tYWluPXRydWUg)
