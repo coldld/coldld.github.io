@@ -1,0 +1,105 @@
+---
+layout: post
+author: ᴢʜᴀɴɢ
+title: "MySql分库分表笔记"
+date: 2023-05-20
+music-id: 
+permalink: /archives/2023-05-20/2
+description: "分库分表"
+---
+
+# MySql分库分表笔记
+## 分库分表
+水平拆数据，垂直拆结构
+### 垂直拆分
+垂直分库 以表为依据，根据业务将`不同表`拆分到`不同库`中。  
+垂直分表 以字段为依据，根据字段属性将不同字段拆分到不同表中。
+### 水平拆分
+水平分库 以字段为依据，按照一定策略，将`一个库`的数据拆分到`多个库`中。  
+水平分表 以字段为依据，按照一定策略，将`一个表`的数据拆分到`多个表`中。
+### MyCat
+mysql -h 192.168.200.210 -p 8066 -u root -p 登录到MyCat
+
+在mycat的命令行中，通过source指令导入表结构，以及对应的数据，查看数据分布情况。  
+`source /root/shopping-table.sql`  导入表  
+`source /root/shopping-insert.sql`  导入表中数据
+#### 配置文件
+schema.xml 作为MyCat中最重要的配置文件之一，涵盖了MyCat的`逻辑库、逻辑表、分片规则、分片节点及数据源`的配置。
+
+rule.xml中定义所有`拆分表的规则`,在使用过程中可以灵活的使用分片算法,或者对同一个分片算法使用不同的参数,它让分片过程可配置化。主要包含两类标签：tableRule、Function。
+
+server.xml配置文件包含了MyCat的系统配置信息，主要有两个重要的标签:system、user。 数据库的账号密码配置文件  
+user -> `dml='0000'增改查删IUSD`
+
+#### MyCat分片 垂直分库
+全局表配置 schema.xml -> type="global"  
+对于省、市、区/县表tb_areas_provinces, tb_areas_city, tb_areas_region, 是属于数据字典表，
+在多个业务模块中都可能会遇到，可以将其设置为`全局表`，利于业务操作。
+
+#### MyCat分片 水平分表
+逻辑表声明 schema.xml -> rule="mod-long"
+
+### 分片规则
+- 范围分片  
+  根据指定的字段及其配置的范围与数据节点的对应情况，来决定该数据属于哪一个分片。
+  ```
+  0-500w: 0
+  500w-1000w: 1
+  1000w-1500w: 2
+  ```
+  ![范围](https://aroucc.oss-cn-hangzhou.aliyuncs.com/images/fkfb/%E8%8C%83%E5%9B%B4.png)
+- 取模分片  
+  根据指定的字段值与节点数量进行求模运算，根据运算结果，来决定该数据属于哪一个分片。
+  ```
+  xxx%3==0: 0
+  xxx%3==1: 1
+  xxx%3==2: 2
+  ```
+  ![取模](https://aroucc.oss-cn-hangzhou.aliyuncs.com/images/fkfb/%E5%8F%96%E6%A8%A1.png)
+- 一致性hash 例UUID  
+  所谓一致性哈希，相同的哈希因子计算值总是被划分到相同的分区表中，不会因为分区节点的增加而改变原来数据的分区位置。
+  ![一致性hash](https://aroucc.oss-cn-hangzhou.aliyuncs.com/images/fkfb/%E4%B8%80%E8%87%B4%E6%80%A7hash.png)
+- 枚举  
+  通过在配置文件中配置可能的枚举值,指定数据分布到不同数据节点上,本规则适用于按照省份、性别、状态拆分数据等业务。
+   ```
+   枚举值1: 0  
+   枚举值2: 1  
+   枚举值3: 2
+
+  <property name="defaultNodel>2</property>
+  插入不存在的status为4的时候不在范围内 默认到2节点
+   ```
+  ![枚举](https://aroucc.oss-cn-hangzhou.aliyuncs.com/images/fkfb/%E6%9E%9A%E4%B8%BE.png)
+- 应用指定  
+  运行阶段由应用自主决定路由到那个分片，直接根据字符子串（必须是数字）计算分片号。
+  ```
+  00xxxx: 0  
+  01xxxx: 1  
+  02xxxx: 2  
+  ```
+  ![应用指定](https://aroucc.oss-cn-hangzhou.aliyuncs.com/images/fkfb/%E5%BA%94%E7%94%A8%E6%8C%87%E5%AE%9A.png)
+
+- 固定分片hash算法(结合了取模和范围的特点)  
+  该算法类似于十进制的求模运算,但是为二进制的操作,例如,取 id的二进制低10位与1111111111进行位&运算。  
+  特点：  
+  如果是求模，连续的值，分别分配到各个不同的分片； 但是此算法会将连续的值可能分配到相同的分片，降低事务处理的难度。  
+  可以均匀分配，也可以非均匀分配。  
+  分片字段必须为数字类型。
+- 字符串hash解析  
+  截取字符串中的指定位置的子字符串,进行hash算法,算出分片
+- 按（天）日期分片
+  ```sql
+  begin: 2024-01-01 
+  end: 2024-01-30
+  partionday: 10 周期 每10天一个分线
+   2022-01-01-2022-01-10: 0
+   2022-01-11-2022-01-20: 1
+   2022-01-21-2022-01-30: 2
+   ```
+- 自然月  
+  使用场景为按照月份来分片，每个自然月为一个分片。
+  ```sql
+  begin: 2024-01-01
+  end: 2024-03-31
+  ```
+  
