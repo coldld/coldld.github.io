@@ -1,11 +1,11 @@
 ---
 layout: post
 author: ᴢʜᴀɴɢ
-title: "SpringBoot redis"
+title: "SpringBoot/Redis笔记"
 date: 2023-05-21
 music-id: 
 permalink: /archives/2023-05-21/1
-description: "SpringBoot redis"
+description: "SpringBoot/redis"
 ---
 
 # SpringBoot笔记

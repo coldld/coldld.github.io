@@ -1,11 +1,11 @@
 ---
 layout: post
 author: ᴢʜᴀɴɢ
-title: "Java Mybatis"
+title: "Java/Mybatis笔记"
 date: 2023-05-19
 music-id: 
 permalink: /archives/2023-05-19/1
-description: "Java Mybatis"
+description: "Java/Mybatis"
 ---
 
 # Java笔记
