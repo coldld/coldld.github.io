@@ -1,14 +1,12 @@
 ---
 layout: post
 author: gujiakai
-title: "[学习转载] 修改ip归属地为朝鲜、南极洲的方法"
+title: "[转载] 修改ip归属地为朝鲜、南极洲的方法"
 date: 2024-03-11
 music-id: 
 permalink: /archives/2024-03-11/0
 description: "改ip归属地为朝鲜、南极洲"
 ---
-
-> [本文作者地址](https://blog.gujiakai.top/2023/08/methods-for-setting-ip-to-north-korea-and-antarctica)
 
 > [GlobalVM 朝鲜IP NAT VPS 简单测评及使用教程](https://ccckfg.top/archives/768)
 
@@ -94,3 +92,5 @@ TAG机场的tg频道的公告显示该家机场存在朝鲜和南极洲的节点
 不推荐v*n服务，不安全。
 
 如果你动手能力极强，并且愿意折腾，可以看看这篇帖子的教程—[【干货】教你如何获得一个南极ip](https://www.nodeseek.com/post-16500-1)。
+
+> [本文作者地址](https://blog.gujiakai.top/2023/08/methods-for-setting-ip-to-north-korea-and-antarctica)

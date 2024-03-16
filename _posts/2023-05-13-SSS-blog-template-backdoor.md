@@ -1,9 +1,9 @@
 ---
 layout: post
 author: Vulkey_Chen
-title: "[学习转载] 为博客模板加后门"
+title: "[转载] 为博客模板加后门"
 date: 2023-05-13
-music-id: 441491828
+music-id: 
 permalink: /archives/2023-05-13/0
 description: "博客模板后门"
 ---
@@ -120,3 +120,5 @@ def main():
 if __name__ == '__main__':
      main()
 ```
+
+> [本文作者地址](https://gh0st.cn/)
