@@ -10,7 +10,7 @@ title: About
 佳能5D4/M50二代微单
 大疆AIR2S=6294
 #### 联系方式
-有事请[ᴍᴇssᴀɢᴀ](/message)留言；
+有事请[ᴍᴇssᴀɢᴀ](/message)留言(以邮箱形式及时通知)；
 
 **网页加载慢**  
 <del>`用了cloudflare的CDN加速 不理想`</del>
