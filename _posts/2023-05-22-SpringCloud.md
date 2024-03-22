@@ -124,3 +124,65 @@ POST /索引库名/_update/文档id
 ### RestClient
 用来操作ES。这些客户端的本质就是组装DSL语句,通过http请求发送给ES。
 
+## Freemarker指令语法
+`gt代替>, FreeMarker会把>解释成FTL标签的结束字符,可使用括号避免这种情况,如:<#if (x>y)>`
+```markdown
+遍历list
+<#list stus as stu> 
+    <tr>
+        <td>${stu_index + 1}</td> 
+        <td>${stu.name}</td> 
+        <td>${stu.age}</td> 
+        <td>${stu.money}</td>
+    </tr>
+</#list>
+
+遍历map
+<#list stuMap?keys as key>
+    <tr>
+        <td>${key_index + 1}</td> 
+        <td>${stuMap[key].name}</td> 
+        <td>${stuMap[key].age}</td> 
+        <td>${stuMap[key].money}</td>
+    </tr>
+</#list>
+
+if指令
+<#if stu.name='小红'>...<#else >...
+</#if>
+
+空值处理
+用法为:variable??,如果该变量存在,返回true,否则返回false
+例:为防止stus为空报错可以加上判断如下:
+<#if stus??>
+<#list stus as stu></#list>
+</#if>
+
+缺失变量默认值使用"!"
+使用！要以指定一个默认值，当变量为空时显示默认值
+例: $fname!'')表示如果name为空显示空字符串。
+如果是嵌套对象则建议使用（）括起来
+例: $f(stu.name)!''}表示,如果stu或name为空默认显示空字符串。
+
+内建函数语法格式:变量 + ? + 函数名称
+1. 集合的大小${集合名?size}
+2. 日期格式化
+显示年月日： ${today?date}
+显示时分秒: ${today?time}
+显示日期+时间: ${today?datetime}
+自定义格式化: ${today?string("yyyy年MM月")}
+
+3. model.addAttribute("point", 102920122); 输出-> 102,920,122
+不想每三位分隔的数字的话${point?c}
+
+4. 将json字符串转成对象text?eval
+例子：其中用到了assign标签，assign的作用是定义一个变量。
+<#assign text="{'bank':'工商银行','account': '10101920201920212'}" />
+<#assign data=text?eval />
+开户行：${data.bank} 账号:${data.account}
+```
+## minIO
+```dockerfile
+docker run -p 9000:9000 --name minio -d --restart=always -e "MINIO_ACCESS_KEY=minio" -e "MINIO_SECRET_KEY=minio123" -v /home/data:/data -v /home/config:/root/.minio minio/minio server /data
+```
+

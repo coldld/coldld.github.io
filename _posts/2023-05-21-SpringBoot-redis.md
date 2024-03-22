@@ -26,7 +26,27 @@ description: "SpringBoot/redis"
 @Resource 基于名称注入,如果基于名称注入失败转为基于类型注入。
 ```
 ## redis
-```java
+```dockerfile
+#注释掉这部分，这是限制redis只能本地访问
+bind 127.0.0.1
+#默认yes，开启保护模式，限制为本地访问
+protected-mode no
+#默认no，改为yes意为以守护进程方式启动，可后台运行，除非kill进程，改为yes会使配置文件方#式启动redis失败
+daemonize no
+#redis持久化（可选）
+appendonly yes
+#设置密码
+requirepass 123321
+
+docker run --restart=always \
+-p 6379:6379 \
+--name myredis \
+-v /usr/local/redis/redis.conf:/etc/redis/redis.conf \
+-v /usr/local/redis/data:/data \
+-d redis:latest redis-server /etc/redis/redis.conf \
+--appendonly yes
+
+
 穿透无中生有key，布隆过滤null隔离。
 缓存击穿过期key，锁与非期解难题。
 雪崩大量过期key，过期时间要随机。

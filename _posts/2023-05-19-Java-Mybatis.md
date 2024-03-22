@@ -108,3 +108,41 @@ public class User {
     private String address;
 }
 ```
+### 能省去parameterType吗
+在MyBatis中，如果你在mapper接口中定义了一个使用List作为参数的方法，并且你希望能够不用显式指定parameterType就能调用这个方法，答案是不能的。
+
+MyBatis需要知道传入的参数是什么类型，以便正确地进行参数映射和SQL执行。即使是传递一个List作为参数，MyBatis也需要知道List中元素的具体类型。如果不指定parameterType，MyBatis将不能正确处理这个方法。
+
+如果你希望避免显式指定parameterType，你可以使用MyBatis的注解来省略这个属性。例如，如果你的方法是传递一个String列表，你可以这样定义：
+
+```java
+public interface YourMapper {
+@Select("SELECT * FROM your_table WHERE column IN (#{item})")
+List<YourType> selectByItems(List<String> items);
+}
+```
+在这个例子中，MyBatis将通过上下文推断出List<String>的parameterType。
+
+如果你正在使用XML配置方式，你需要在`<select>`标签中显式指定parameterType，例如：
+
+```xml
+<select id="selectByItems" parameterType="java.util.List" resultType="YourType">
+SELECT * FROM your_table WHERE column IN
+<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+#{item}
+</foreach>
+</select>
+```
+在这个例子中，parameterType被明确指定为java.util.List。
+
+### 使用XML配置方式 能省去parameterType吗
+
+在使用MyBatis的XML配置方式时，通常是不能省略parameterType属性的。MyBatis需要知道传入的参数类型以便正确映射到SQL语句中的占位符。parameterType属性允许你显式地指定传入参数的完整类型。
+
+如果你省略了parameterType属性，MyBatis在运行时可能会遇到类型解析的问题，因为它无法自动推断出传入参数的类型。这可能会导致运行时错误，比如类型不匹配或无法找到合适的映射。
+
+不过，有一种情况下，你可以不使用parameterType属性，那就是当你的参数是一个简单类型（如int、String等）或者MyBatis能够自动推断出参数类型时。例如，如果你有一个只有一个简单类型参数的方法，MyBatis可能能够基于上下文推断出参数类型。
+
+但是，对于复杂类型，特别是像List、Map这样的集合类型，强烈建议显式指定parameterType。这是因为这些类型包含的元素可能具有不同的类型，而MyBatis需要知道这些具体类型才能正确映射到SQL语句中。
+
+总的来说，为了确保MyBatis能够正确解析和执行你的SQL语句，最佳实践是始终在XML映射文件中显式指定parameterType属性，即使对于简单类型的参数也是如此。这有助于避免潜在的类型解析错误和运行时问题。

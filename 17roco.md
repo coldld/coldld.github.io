@@ -1,6 +1,6 @@
 ---
 layout: page
-title: 洛克王国
+title: Roco
 ---
 <script>
  window.onload=function(){ 
