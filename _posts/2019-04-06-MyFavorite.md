@@ -7,6 +7,15 @@ music-id: 441491828
 permalink: /archives/2019-04-06/1
 description: "MyFavorite"
 ---
+佳能5D4/M50二代微单
+大疆AIR2S=6294
+捷安特scr-d
+
+3-4k ad350
+5-10k 瑞豹
+10-20k 捷安特
+50-100k 崔克
+
 ### [fofa ChatGPT](https://fofa.info/result?qbase64=ImxvYWRpbmctd3JhcCIgJiYgImJhbGxzIiAmJiAiY2hhdCIgJiYgaXNfZG9tYWluPXRydWUg)
 一没有国外手机号，二不能翻墙，三没有钱。对于这种资源fofa有一堆，免注册免翻墙免费。
 
