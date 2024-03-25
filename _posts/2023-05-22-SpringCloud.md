@@ -47,6 +47,13 @@ public interface UserClient {
 方式一:指定FeignClient所在包@EnableFeignClients(basePackages = "cn.itcast.feign.clients")
 方式二:推荐:指定FeignClient字节码@EnableFeignClients(clients = {UserClient.class})
 ```
+### 服务降级
+是服务自我保护的一种方式,或者保护下游服务的一种方式,用于确保服务不会受请求突增影响变得不可用，确保服务不会崩溃
+服务降级虽然会导致请求失败，但是不会导致阻塞。  
+①：在heima-leadnews-feign-api编写降级逻辑  
+②：远程接口中指向降级代码  
+③：客户端开启降级  
+
 ## Gateway负载均衡相当于在很多orderservice里面选一个
 #### Nacos的负载均衡是给orderservice选一个userservice
 #### 网关的负载均衡是客户端请求到服务时发生的，而Feign的负载均衡是一个服务调另一个服务时发生的
@@ -68,6 +75,55 @@ docker run ... -v html:/root/htm：把html数据卷挂载到容器内的/root/ht
 -v [宿主机目录]:[容器内目录] 例-v /tmp/mysql/data:/var/lib/mysql
 -v [宿主机文件]:[容器内文件] 
 ```
+### Kafka
+追求高吞吐量,适合产生大量数据的互联网服务的数据收集业务
+### RocketMQ
+可靠性要求很高的金融互联网领域,稳定性高,经历了多次阿里双11考验
+### RabbitMQ
+性能较好,社区活跃度高,数据量没有那么大,优先选择功能比较完备的RabbitMQ
+## kafka
+```dockerfile
+先安装zookeeper
+docker run -d --name zookeeper -p 2181:2181 zookeeper:3.4.14
+
+再安装kafka
+docker run -d --name kafka \
+--env KAFKA_ADVERTISED_HOST_NAME=192.168.200.130 \
+--env KAFKA_ZOOKEEPER_CONNECT=192.168.200.130:2181 \
+--env KAFKA_ADVERTISED_LISTENERS-PLAINTEXT://192.168.200.130:9092 \
+--env KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092 \
+--env KAFKA_HEAP_OPTS="-Xmx256M -Xms256M" \
+--net=host wurstmeister/kafka:2.12-2.3.1
+
+云主机除外,必须映射 -p 9092:9092
+---net=host,直接使用容器宿主机的网络命名空间,即没有独立的网络环境。它使用宿主机的ip和端口
+```
+### Kafka高可用设计
+1. 集群
+2. 备份机制(Replication)
+   Kafka中消息的备份又叫做副本(Replica)  
+   Kafka 定义了两类副本：  
+   领导者副本(Leader Replica)  
+   追随者副本（Follower Replica)  
+   ISR (in-sync replica)需要同步复制保存的follower
+   #### 如果leader失效后，需要选出新的leader，选举的原则如下：  
+   第一:选举时优先从ISR中选定，因为这个列表中follower的数据是与leader同步的  
+   第二:如果ISR列表中的follower都不行了,就只能从其他follower中选取  
+   #### 极端情况，就是所有副本都失效了，这时有两种方案  
+   第一：等待ISR中的一个活过来，选为Leader，数据可靠，但活过来的时间不确定一  
+   第二：选择第一个活过来的Replication，不一定是ISR中的，选为leader，以最快速度恢复可用性，但数据不一定完整 
+   
+生产者配置
+```java
+//ack配置 消息确认机制 默认1
+prop.put(ProducerConfig.ACKS_CONFIG, "all");
+//重试次数10次
+prop.put(ProducerConfig.RETRIES_CONFIG, 10);
+//数据压缩
+prop.put(ProducerConfig.COMPRESSION_TYPE_CONFIG,"snappy");
+```
+消费者配置  
+偏移量提交方式 同步和异步组合提交
 ## RabbitMQ
 ### SpringAMQP
 提供了模板来发送和接收消息。包含两部分，其中spring-amqp是基础抽象，spring-rabbit是底层的默认实现。

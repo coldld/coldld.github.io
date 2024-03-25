@@ -25,6 +25,24 @@ description: "SpringBoot/redis"
 @Autowired 基于类型注入。
 @Resource 基于名称注入,如果基于名称注入失败转为基于类型注入。
 ```
+### 异步线程调用
+①：在自动审核的方法上加上@Async注解（标明要异步调用）  
+②：在文章发布成功后调用审核的方法  
+③：在自媒体引导类中使用@EnableAsync注解开启异步调用  
+
+### 循环依赖
+看了下关系：岗位是挂组织的: PositionServicelmpl 有调用 OrgServicelmpl
+组织里面有查询人员: OrgServicelmpl 有调用 UserServicelmpl
+人员是查组织岗位的： UserServicelmpl 有调用 PositionServicelmpl
+这样就变成循环依赖了。而且OrgServicelmpl 里面还有@Async 的使用。
+处理方式一：
+使用延迟加载Q： @Lazy的使用
+```java
+@Resource
+@Lazy
+private IUserService userService;
+```
+
 ## redis
 ```dockerfile
 #注释掉这部分，这是限制redis只能本地访问
