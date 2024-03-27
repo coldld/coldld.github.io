@@ -75,6 +75,17 @@ docker run ... -v html:/root/htm：把html数据卷挂载到容器内的/root/ht
 -v [宿主机目录]:[容器内目录] 例-v /tmp/mysql/data:/var/lib/mysql
 -v [宿主机文件]:[容器内文件] 
 ```
+## MinIO
+```dockerfile
+docker run -p 9000:9000 --name minio -d --restart=always -e "MINIO_ACCESS_KEY=minio" -e "MINIO_SECRET_KEY=minio123" -v /home/data:/data -v /home/config:/root/.minio minio/minio server /data
+```
+## Seata
+提供了四种不同的分布式事务解决方案：
+XA模式：强一致性分阶段事务模式，牺牲了一定的可用性，无业务侵入
+TCC模式：最终一致的分阶段事务模式，有业务侵入
+AT模式:最终一致的分阶段事务模式,无业务侵入,也是Seata的默认模式
+SAGA模式：长事务模式，有业务侵入
+
 ### Kafka
 追求高吞吐量,适合产生大量数据的互联网服务的数据收集业务
 ### RocketMQ
@@ -160,12 +171,29 @@ return new Jackson2JsonMessageConverter();
 ```
 ## ES(elasticsearch)
 ```java
+docker run -id --name elasticsearch \
+        -p 9200:9200 -p 9300:9300 \
+        -v /usr/share/elasticsearch/plugins:/usr/share/elasticsearch/plugins \
+        -e "discovery.type=single-node" elasticsearch:7.4.0
+        
+配置中文分词器ik
+把资料中的elasticsearch-analysis-ik-7.4.0.zip上传到服务器上,放到对应目录(plugins)解压
+
+PUT请求 添加映射: http://192.168.200.130:9200/app_info_article
+GET请求 查询映射: http://192.168.200.129:9200/app_info_article
+DELETE请求 删除索引及映射: http://192.168.200.129:9200/app_info_article
+GET请求 查询所有文档: http://192.168.200.129:9200/app_info_article/_search
+
+        
 # 创建文档
 POST/索引库名/_doc/文档id{json文档}
+        
 # 查询文档
 GET /索引库名/_doc/文档id
+        
 # 删除文档
 DELETE /索引库名/_doc/文档id
+        
 # 修改文档
 全量修改，会删除旧文档，添加新文档
 PUT /索引库名/_doc/文档id
@@ -177,8 +205,37 @@ PUT /索引库名/_doc/文档id
 增量修改，修改指定字段值(局部修改)
 POST /索引库名/_update/文档id
 ```
-### RestClient
+### RestClient和RestHighLevelClient
 用来操作ES。这些客户端的本质就是组装DSL语句,通过http请求发送给ES。
+
+前者是一个低级客户端,通过Http与elasticsearcha集群进行通信,可以做到负载均衡、故障转移、持久化链接、自动发现集群节点等功能，同时支持所有elasticsearch版本，但是需要自己对请求和相应做编解码(自己写JSON) ;
+
+后者是一个高级客户端,对增删改差进行了封装,不需要处理编解码,类似之前的TransportClient,但是兼容性较差，对客户端和集群版本要求较高。因为RestClient没有提供增删改差方法,只能自己写json并选择Http请求的方法进行实现,一般使用较少,只有RestHighLevelClient无法满足的情况下才会使用。
+
+## MongoDB
+```dockerfile
+docker run -di --name mongo-service -restart=always \
+    -p 27017:27017 \
+    -v ~/data/mongodata:/data mongo
+```
+## xxl-job 分布式任务调度框架
+```dockerfile
+创建mysql容器，初始化xxl-job的SQL脚本
+docker run -p 3306:3306 --name mysql57 \
+-v /opt/mysql/conf:/etc/mysql \
+-v /opt/mysql/logs:/var/log/mysql \
+-v /opt/mysql/data:/var/lib/mysql \
+-e MYSQL_ROOT_PASSWORD=root \
+-d mysql:5.7
+
+创建容器
+docker run -e PARAMS="--spring.datasource.url=jdbc:mysql://192.168.200.130:3306/xxl_job?Unicode=true&characterEncoding=UTF-8 \
+--spring.datasource.username=root \ 
+--spring.datasource.password=root" \
+-p 8888:8080 -v /tmp:/data/applogs \
+ --name xxl-job-admin --restart=always -d xuxueli/xxl-job-admin:2.3.0
+```
+分片广播方式：在每一秒中，实例A和B同时接受了10000任务，但根据各自分片id只处理其中的5000个，另外5000个跳过了
 
 ## Freemarker指令语法
 `gt代替>, FreeMarker会把>解释成FTL标签的结束字符,可使用括号避免这种情况,如:<#if (x>y)>`
@@ -237,8 +294,5 @@ if指令
 <#assign data=text?eval />
 开户行：${data.bank} 账号:${data.account}
 ```
-## minIO
-```dockerfile
-docker run -p 9000:9000 --name minio -d --restart=always -e "MINIO_ACCESS_KEY=minio" -e "MINIO_SECRET_KEY=minio123" -v /home/data:/data -v /home/config:/root/.minio minio/minio server /data
-```
+
 
